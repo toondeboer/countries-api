@@ -8,13 +8,14 @@ import java.net.URL;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.countries.model.BordersAsia;
 import com.countries.model.PopulationDensity;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Api {
 
-    private static String baseUrl = "https://restcountries.com/v3.1/all";
+    private static String baseUrl = "https://restcountries.com/v3.1/";
 
     private static JsonNode get(String query) {
         JsonNode jsonNode = null;
@@ -53,7 +54,7 @@ public class Api {
     }
 
     public static Set<PopulationDensity> getPopulationDensity() {
-        String query = "?fields=name,area,population";
+        String query = "all?fields=name,area,population";
         JsonNode jsonNode = get(query);
 
         Set<PopulationDensity> result = new TreeSet<>();
@@ -66,6 +67,23 @@ public class Api {
             double populationDensity = population / area;
 
             result.add(new PopulationDensity(country, populationDensity));
+        }
+
+        return result;
+    }
+
+    public static BordersAsia getMostBoredersAsia() {
+        String query = "region/asia?fields=name,borders,continents";
+        JsonNode jsonNode = get(query);
+
+        BordersAsia result = new BordersAsia("", -1l);
+
+        for (JsonNode element : jsonNode) {
+            long borders = element.findValue("borders").size();
+            if (borders > result.borders()) {
+                String country = element.findValue("common").asText();
+                result = new BordersAsia(country, borders);
+            }
         }
 
         return result;
