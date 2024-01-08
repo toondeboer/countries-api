@@ -5,25 +5,28 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.util.Set;
+import java.util.TreeSet;
+
+import com.countries.model.PopulationDensity;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Api {
 
     private static String baseUrl = "https://restcountries.com/v3.1/all";
 
-    public static void test() {
+    private static JsonNode get(String query) {
+        JsonNode jsonNode = null;
 
         try {
-            URI uri = new URI(baseUrl);
+            URI uri = new URI(baseUrl + query);
             URL url = uri.toURL();
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
-            // Set headers if needed
-            // connection.setRequestProperty("HeaderName", "HeaderValue");
-
             int responseCode = connection.getResponseCode();
-            System.out.println("Response Code: " + responseCode);
 
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -35,8 +38,8 @@ public class Api {
                 }
                 in.close();
 
-                // Printing the response
-                System.out.println("Response Body: " + response.toString());
+                ObjectMapper objectMapper = new ObjectMapper();
+                jsonNode = objectMapper.readTree(response.toString());
             } else {
                 System.out.println("Error in fetching data");
             }
@@ -45,5 +48,26 @@ public class Api {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return jsonNode;
+    }
+
+    public static Set<PopulationDensity> getPopulationDensity() {
+        String query = "?fields=name,area,population";
+        JsonNode jsonNode = get(query);
+
+        Set<PopulationDensity> result = new TreeSet<>();
+        for (JsonNode element : jsonNode) {
+            String country = element.findValue("common").asText();
+            double area = element.findValue("area").asDouble();
+            area = area > 0 ? area : Double.POSITIVE_INFINITY;
+            long population = element.findValue("population").asLong();
+
+            double populationDensity = population / area;
+
+            result.add(new PopulationDensity(country, populationDensity));
+        }
+
+        return result;
     }
 }
