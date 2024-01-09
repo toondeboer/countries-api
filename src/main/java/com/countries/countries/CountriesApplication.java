@@ -8,12 +8,13 @@ import com.countries.model.PopulationDensity;
 public class CountriesApplication {
 
 	public static void main(String[] args) {
-		populationDensity();
-		mostBoredersAsia();
+		Service service = new Service(new Controller());
+		populationDensity(service);
+		mostBoredersAsia(service);
 	}
 
-	private static void populationDensity() {
-		Set<PopulationDensity> populationDensity = Service.getPopulationDensity();
+	private static void populationDensity(Service service) {
+		Set<PopulationDensity> populationDensity = service.getPopulationDensity();
 
 		System.out.println("\nCountries sorted on population density:");
 		int index = 1;
@@ -23,8 +24,8 @@ public class CountriesApplication {
 		}
 	}
 
-	private static void mostBoredersAsia() {
-		BordersAsia bordersAsia = Service.getMostBoredersAsia();
+	private static void mostBoredersAsia(Service service) {
+		BordersAsia bordersAsia = service.getMostBoredersAsia();
 		System.out.println(
 				"\nAsian country with most borders: " + bordersAsia.country() + " (" + bordersAsia.borders() + ")");
 	}

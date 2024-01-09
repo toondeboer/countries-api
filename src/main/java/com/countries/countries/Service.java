@@ -9,9 +9,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class Service {
 
-    public static Set<PopulationDensity> getPopulationDensity() {
+    private final Controller controller;
+
+    public Service(Controller controller) {
+        this.controller = controller;
+    }
+
+    public Set<PopulationDensity> getPopulationDensity() {
         String query = "all?fields=name,area,population";
-        JsonNode jsonNode = Controller.get(query);
+        JsonNode jsonNode = controller.get(query);
 
         Set<PopulationDensity> result = new TreeSet<>();
         for (JsonNode element : jsonNode) {
@@ -28,13 +34,13 @@ public class Service {
         return result;
     }
 
-    public static BordersAsia getMostBoredersAsia() {
-        String query = "region/asia?fields=name,borders,continents";
-        JsonNode jsonNode = Controller.get(query);
+    public BordersAsia getMostBoredersAsia() {
+        String query = "region/asia?fields=name,borders";
+        JsonNode jsonNode = controller.get(query);
 
-        BordersAsia result = new BordersAsia("", -1l);
+        BordersAsia result = new BordersAsia("", -1);
         for (JsonNode element : jsonNode) {
-            long borders = element.findValue("borders").size();
+            int borders = element.findValue("borders").size();
             if (borders > result.borders()) {
                 String country = element.findValue("common").asText();
                 result = new BordersAsia(country, borders);

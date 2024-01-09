@@ -11,9 +11,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Controller {
 
-    private static String baseUrl = "https://restcountries.com/v3.1/";
+    private String baseUrl = "https://restcountries.com/v3.1/";
 
-    public static JsonNode get(String query) {
+    public JsonNode get(String query) {
         JsonNode jsonNode = null;
 
         try {
