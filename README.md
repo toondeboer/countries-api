@@ -1,12 +1,25 @@
+# How to run
+
+Build project
+`mvn package`
+
+Run project
+`java -jar target/countries-0.0.1-SNAPSHOT.jar`
+
+Run tests
+`mvn test`
+
 # Developer Assessment
 
 ##Description
 
 Write a program that retrieves the following information given the data from the API as described on https://gitlab.com/restcountries/restcountries:
+
 - Sorted list of countries by population density in descending order.
 - Country in Asia containing the most bordering countries of a different region.
 
 ##Requirements
+
 - The program should be written in Java or any other language targeting the JVM.
 - Write production-ready code.
 - Document how to run the application.
