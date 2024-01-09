@@ -13,7 +13,7 @@ public class CountriesApplication {
 	}
 
 	private static void populationDensity() {
-		Set<PopulationDensity> populationDensity = Api.getPopulationDensity();
+		Set<PopulationDensity> populationDensity = Service.getPopulationDensity();
 
 		System.out.println("\nCountries sorted on population density:");
 		int index = 1;
@@ -24,7 +24,7 @@ public class CountriesApplication {
 	}
 
 	private static void mostBoredersAsia() {
-		BordersAsia bordersAsia = Api.getMostBoredersAsia();
+		BordersAsia bordersAsia = Service.getMostBoredersAsia();
 		System.out.println(
 				"\nAsian country with most borders: " + bordersAsia.country() + " (" + bordersAsia.borders() + ")");
 	}
